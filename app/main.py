@@ -42,6 +42,7 @@ class Meme(db.Model):
     def __repr__(self):
         return '<Meme %r>' % self.id
 
+
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -50,6 +51,7 @@ class Stock(db.Model):
 
     def __repr__(self):
         return '<Stock %r>' % self.id
+        
 
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
