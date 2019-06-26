@@ -46,7 +46,7 @@ class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     symbol = db.Column(db.String(10), nullable=False)
-    price = db.Column(db.Float, nullable = False)
+    price = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return '<Stock %r>' % self.id
