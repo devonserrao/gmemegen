@@ -51,13 +51,13 @@ class Stock(db.Model):
 
     def __repr__(self):
         return '<Stock %r>' % self.id
-       
+
 
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     portfolio_owner = db.Column(db.String(80), nullable=False)
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
-  
+    
     def __repr__(self):
         return '<Portfolio %r>' % self.id
 
