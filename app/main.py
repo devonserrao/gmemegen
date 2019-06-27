@@ -43,11 +43,29 @@ class Meme(db.Model):
         return '<Meme %r>' % self.id
 
 
+# class Stock(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(80), nullable=False)
+#     symbol = db.Column(db.String(10), nullable=False)
+#     price = db.Column(db.Float, nullable=False)
+
+#     def __repr__(self):
+#         return '<Stock %r>' % self.id
+
+
+# class Portfolio(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     portfolio_owner = db.Column(db.String(80), nullable=False)
+#     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
+
+#     def __repr__(self):
+#         return '<Portfolio %r>' % self.id
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     symbol = db.Column(db.String(10), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    # portfolio_id = db.relationship('')
 
     def __repr__(self):
         return '<Stock %r>' % self.id
@@ -55,11 +73,15 @@ class Stock(db.Model):
 
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    portfolio_owner = db.Column(db.String(80), nullable=False)
-    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
+    owner = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
         return '<Portfolio %r>' % self.id
+
+
+Portfolio_Stocks = db.Table(db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'), primary_key=True),
+db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'), primary_key=True)
+)
 
 
 @app.before_first_request
@@ -130,6 +152,42 @@ def create_meme():
         return redirect(url_for('view_meme', meme_id=meme.id))
     except KeyError:
         abort(400, "Incorrect parameters.")
+
+
+# #Creates a stock
+# @app.route('/stock', methods=["POST"])
+# def create_stock():
+#     try:
+#         stock = Stock('fake_Google', 'FGOOG', 100)
+#         db.session.add(stock)
+#         db.session.commit()
+
+#         return redirect(url_for('view_stock', stock_id=stock.id))
+#     except KeyError:
+#         abort(400,"Incorrect Parameters!")
+
+
+# #Gets all stocks
+# @app.route('/stock', methods=["GET"])
+# def view_stocks():
+#     stocks = Stock.query.order_by(Stock.id.desc()).all()
+#     return render_template('stocks.html', stocks=stocks)
+
+# #Get stock by stock id
+# @app.route('/stock/<int:stock_id>', methods=["GET"])
+# def view_stock(stock_id):
+#     Stock.query.filter_by(id=stock_id).first()
+
+# #Gets all portfolios
+# @app.route('/portfolio', methods=["GET"])
+# def view_portfolios():
+#     Portfolio.query.order_by(Portfolio.id.desc()).all()
+
+
+# #Gets portfolio by stock id
+# @app.route('/portfolio/<int:portfolio_id>', methods=["GET"])
+# def view_portfolio(portfolio_id)
+#     Portfolio.query.filter_by(id=portfolio_id).first()
 
 
 def generate_meme(file, meme_id):
