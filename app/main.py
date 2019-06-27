@@ -82,9 +82,9 @@ class Portfolio(db.Model):
 
 Portfolio_Stocks = db.Table(
     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'), 
-                primary_key=True),
+            primary_key=True),
     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
-                 primary_key=True)
+            primary_key=True)
 )
 
 
