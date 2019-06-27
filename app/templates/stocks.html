@@ -1,0 +1,15 @@
+{% include  "header.html" %}
+<div>
+    <h2>Stock List:</h2>
+    <div class = "content">
+        {% for stock in stocks %}
+            <!-- <a href="{{ url_for('view_stocks')}}">
+            </a> -->
+            <div>
+                {{ stock['name'] }}
+            </div>
+        {% endfor %}
+        <div></div>
+    </div>
+</div>
+{% include  "footer.html" %}
