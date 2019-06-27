@@ -56,7 +56,8 @@ class Meme(db.Model):
 # class Portfolio(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     portfolio_owner = db.Column(db.String(80), nullable=False)
-#     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=False)
+#     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=Fals
+#     e)
 
 #     def __repr__(self):
 #         return '<Portfolio %r>' % self.id
@@ -79,8 +80,10 @@ class Portfolio(db.Model):
         return '<Portfolio %r>' % self.id
 
 
-Portfolio_Stocks = db.Table(db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'), primary_key=True),
-db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'), primary_key=True)
+Portfolio_Stocks = db.Table(
+    db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'), primary_key=True),
+    db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'), primary_ke
+    y=True)
 )
 
 
