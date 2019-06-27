@@ -158,7 +158,7 @@ def create_meme():
         abort(400, "Incorrect parameters.")
 
 
-# #Creates a stock
+# Creates a stock
 @app.route('/stock', methods=["POST"])
 def create_stock():
     try:
@@ -168,21 +168,21 @@ def create_stock():
 
         return redirect(url_for('view_stock', stock_id=stock.id))
     except KeyError:
-        abort(400,"Incorrect Parameters!")
+        abort(400, "Incorrect Parameters!")
 
 
-#Gets all stocks
+# Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
     stocks = Stock.query.order_by(Stock.id.desc()).all()
     return render_template('stocks.html', stocks=stocks)
 
 
-#Get stock by stock id
+# Get stock by stock id
 @app.route('/stock/<int:stock_id>', methods=["GET"])
 def view_stock(stock_id):
     Stock.query.filter_by(id=stock_id).first()
-    
+
 
 # #Gets all portfolios
 # @app.route('/portfolio', methods=["GET"])
