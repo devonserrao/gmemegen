@@ -184,6 +184,12 @@ def view_stock(stock_id):
     Stock.query.filter_by(id=stock_id).first()
 
 
+# Renders create_stock.html
+@app.route('/stock/cstock', methods=["GET"])
+def get_create_stock():
+    return render_template("create_stock.html")
+
+
 # #Gets all portfolios
 # @app.route('/portfolio', methods=["GET"])
 # def view_portfolios():
