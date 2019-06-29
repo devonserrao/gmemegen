@@ -162,7 +162,7 @@ def create_meme():
 @app.route('/stock', methods=["POST"])
 def create_stock():
     try:
-        stock = Stock('fake_Google', 'FGOOG', 100)
+        stock = Stock(name='fake_Google', symbol='FGOOG', price=100)
         db.session.add(stock)
         db.session.commit()
 
