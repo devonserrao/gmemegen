@@ -166,7 +166,7 @@ def create_stock():
         db.session.add(stock)
         db.session.commit()
 
-        print("stock created!", file=sys.stderr)
+        print("stock created!")
         # return redirect(url_for('view_stock', stock_id=stock.id))
     except KeyError:
         abort(400, "Incorrect Parameters!")
