@@ -181,7 +181,8 @@ def view_stocks():
 # Get stock by stock id
 @app.route('/stock/<int:stock_id>', methods=["GET"])
 def view_stock(stock_id):
-    Stock.query.filter_by(id=stock_id).first()
+    stock = Stock.query.filter_by(id=stock_id).first()
+    return render_template('stocks.html', stocks=stock)
 
 
 # Renders create_stock.html
