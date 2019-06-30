@@ -168,6 +168,8 @@ def create_stock():
 
         print("stock created!")
         # return redirect(url_for('view_stock', stock_id=stock.id))
+        return redirect('/template')
+        return redirect()
     except KeyError:
         abort(400, "Incorrect Parameters!")
 
