@@ -7,6 +7,15 @@
         </div>
     </h2>
     <form class="ui huge form" action="{{url_for('create_stock')}}" method="post" style="text-align:left">
+        <div class="field">
+            <label for="name">Name:</label> <input id="name" type="text" name="name">
+        </div>
+        <div class="field">
+            <label for="symbol">Symbol:</label> <input id="symbol" type="text" name="symbol">
+        </div>
+        <div class="field">
+            <label for="price">Price:</label> <input id="price" type="text" name="price">
+        </div>
         <input type="submit" class="ui fluid green button" value="Submit">
     </form>
 </div>
