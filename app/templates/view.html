@@ -16,9 +16,12 @@
             <h2 class="ui dividing header">
                 <i class="picture icon"></i>
                 <div class="content">
-                    Create your stock
+                    <a href="{{ url_for('get_create_stock') }}" class="item">Create Stock</a>
                 </div>
-                <a href="{{ url_for('get_create_stock') }}" class="item">Recent</a>
+                <div class="content">
+                    <a href="{{ url_for('get_create_portfolio') }}" class="item">Create Portfolio</a>
+                </div>
+                <!-- <a href="{{ url_for('get_create_stock') }}" class="item">Stock</a> -->
             </h2>
         </div>
 
