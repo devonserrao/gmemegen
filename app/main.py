@@ -228,9 +228,10 @@ def view_portfolios():
 
 # Gets portfolio by stock id
 @app.route('/portfolio/<int:portfolio_id>', methods=["GET"])
-def view_portfolio(portfolio_id)
+def view_portfolio(portfolio_id):
     portfolio = Portfolio.query.filter_by(id=portfolio_id).first()
     return render_template('portfolio_id.html', portfolio=portfolio)
+
 
 def generate_meme(file, meme_id):
     # Query for meme
