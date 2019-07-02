@@ -78,7 +78,7 @@ class Stock(db.Model):
                                         secondary=Portfolio_Stocks,
                                         lazy='subquery',
                                         backref=db.backref('stocks_linked',
-                                        lazy=True))
+                                         lazy=True))
 
     def __repr__(self):
         return '<Stock %r>' % self.id
@@ -99,7 +99,7 @@ class Portfolio(db.Model):
 #               primary_key=True)
 # )
 # 
-#
+# 
 @app.before_first_request
 def setup_db():
     # Create folder for memes if it doesn't exist
