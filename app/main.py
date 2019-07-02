@@ -66,7 +66,10 @@ class Stock(db.Model):
     name = db.Column(db.String(80), nullable=False)
     symbol = db.Column(db.String(10), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    # portfolio_id = db.relationship('')
+    portfolios_linked = db.relationship('Portfolio',
+                                        secondary=Portfolio_Stocks,
+                                        lazy='subquery',
+                                        backref=db.backref('stocks_linked', lazy=True))
 
     def __repr__(self):
         return '<Stock %r>' % self.id
