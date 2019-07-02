@@ -226,10 +226,11 @@ def view_portfolios():
     return render_template('portfolios.html', portfolios=portfolios)
 
 
-# #Gets portfolio by stock id
-# @app.route('/portfolio/<int:portfolio_id>', methods=["GET"])
-# def view_portfolio(portfolio_id)
-#     Portfolio.query.filter_by(id=portfolio_id).first()
+# Gets portfolio by stock id
+@app.route('/portfolio/<int:portfolio_id>', methods=["GET"])
+def view_portfolio(portfolio_id):
+    portfolio = Portfolio.query.filter_by(id=portfolio_id).first()
+    return render_template('portfolio_id.html', portfolio=portfolio)
 
 
 def generate_meme(file, meme_id):
