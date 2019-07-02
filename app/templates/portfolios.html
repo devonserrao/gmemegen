@@ -1,0 +1,15 @@
+{% include  "header.html" %}
+<div>
+    <h2>Portfolio List:</h2>
+    <div class = "content">
+        {% for portfolio in portfolios %}
+            <!-- <a href="{{ url_for('view_portfolios')}}">
+            </a> -->
+            <div>
+                {{ portfolio['owner'] }}
+            </div>
+        {% endfor %}
+        <div></div>
+    </div>
+</div>
+{% include  "footer.html" %}

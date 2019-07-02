@@ -1,0 +1,16 @@
+{% include  "header.html" %}
+<div class="ui center aligned segment">
+    <h2 class="ui dividing header">
+        <i class="plus icon"></i>
+        <div class="content">
+            Creating
+        </div>
+    </h2>
+    <form class="ui huge form" action="{{url_for('create_portfolio')}}" method="post" style="text-align:left">
+        <div class="field">
+            <label for="owner">Portfolio Owner:</label> <input id="owner" type="text" name="owner">
+        </div>
+        <input type="submit" class="ui fluid green button" value="Submit">
+    </form>
+</div>
+{% include  "footer.html" %}

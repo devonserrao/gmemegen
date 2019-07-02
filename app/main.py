@@ -197,10 +197,33 @@ def get_create_stock():
     return render_template("create_stock.html")
 
 
-# #Gets all portfolios
-# @app.route('/portfolio', methods=["GET"])
-# def view_portfolios():
-#     Portfolio.query.order_by(Portfolio.id.desc()).all()
+# Renders create_stock.html
+@app.route('/portfolio/cportfolio', methods=["GET"])
+def get_create_portfolio():
+    return render_template("create_portfolio.html")
+
+
+# Creates a portfolio
+@app.route('/portfolio', methods=["POST"])
+def create_portfolio():
+    try:
+        portfolio = Portfolio(
+            owner=request.form['owner']
+        )
+        db.session.add(portfolio)
+        db.session.commit()
+
+        print("portfolio created!")
+        return redirect('/template')
+    except KeyError:
+        abort(400, "Incorrect Parameters!")
+
+
+# Gets all portfolios
+@app.route('/portfolio', methods=["GET"])
+def view_portfolios():
+    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    return render_template('portfolios.html', portfolios=portfolios)
 
 
 # #Gets portfolio by stock id
