@@ -43,6 +43,14 @@ class Meme(db.Model):
         return '<Meme %r>' % self.id
 
 
+Portfolio_Stocks = db.Table(
+    db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
+              primary_key=True),
+    db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
+              primary_key=True)
+)
+
+
 # class Stock(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     name = db.Column(db.String(80), nullable=False)
@@ -69,7 +77,8 @@ class Stock(db.Model):
     portfolios_linked = db.relationship('Portfolio',
                                         secondary=Portfolio_Stocks,
                                         lazy='subquery',
-                                        backref=db.backref('stocks_linked', lazy=True))
+                                        backref=db.backref('stocks_linked',
+                                        lazy=True))
 
     def __repr__(self):
         return '<Stock %r>' % self.id
@@ -83,14 +92,14 @@ class Portfolio(db.Model):
         return '<Portfolio %r>' % self.id
 
 
-Portfolio_Stocks = db.Table(
-    db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
-              primary_key=True),
-    db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
-              primary_key=True)
-)
-
-
+# Portfolio_Stocks = db.Table(
+#     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
+#               primary_key=True),
+#     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
+#               primary_key=True)
+# )
+# 
+#
 @app.before_first_request
 def setup_db():
     # Create folder for memes if it doesn't exist
