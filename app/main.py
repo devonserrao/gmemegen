@@ -44,6 +44,7 @@ class Meme(db.Model):
 
 
 Portfolio_Stocks = db.Table(
+    'Portfolio_Stocks',
     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
               primary_key=True),
     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
