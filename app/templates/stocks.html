@@ -15,7 +15,7 @@
                 <td data-label="Name">{{ stock['name'] }}</td>
                 <td data-label="Symbol">{{ stock['symbol'] }}</td>
                 <td data-label="Price">{{ stock['price'] }}</td>
-                <td data-label="Assign"><input type="submit" class="ui fluid green button" value="Submit" onclick="{{ url_for('put_stock_in_portfolio', stock_id=stock['name'], portfolio_id=1) }}"></td>
+                <td data-label="Assign"><input type="submit" class="ui fluid green button" value="Submit" onclick="put_stock_in_portfolio(1,1)"></td>
                 </tr>
                 {% endfor %}
             </tbody>
