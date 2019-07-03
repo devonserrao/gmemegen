@@ -248,7 +248,7 @@ def view_portfolio(portfolio_id):
 
 
 # Allows a stock to be assigned to a portfolio
-@app.route('/portfolio/', methods=["POST"])
+@app.route('/portfolio/psip', methods=["POST"])
 def put_stock_in_portfolio(stock_id, portfolio_id):
     portfolio_rel = Portfolio.query.filter_by(id=portfolio_id).first()
     stock_rel = Stock.query.filter_by(id=stock_id).first()
