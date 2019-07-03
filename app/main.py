@@ -252,7 +252,7 @@ def view_portfolio(portfolio_id):
 # def put_stock_in_portfolio(stock_id, portfolio_id):
 #     portfolio_rel = Portfolio.query.filter_by(id=portfolio_id).first()
 #     stock_rel = Stock.query.filter_by(id=stock_id).first()
-# 
+#
 #     portfolio_rel.stocks_linked.append(stock_rel)
 #     print("stock assigned to portfolio")
 #     db.session.commit()
