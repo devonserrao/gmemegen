@@ -247,16 +247,16 @@ def view_portfolio(portfolio_id):
     return render_template('portfolio_id.html', portfolio=portfolio)
 
 
-# # Allows a stock to be assigned to a portfolio
-# @app.route('/portfolio/', methods=["POST"])
-# def put_stock_in_portfolio(stock_id, portfolio_id):
-#     portfolio_rel = Portfolio.query.filter_by(id=portfolio_id).first()
-#     stock_rel = Stock.query.filter_by(id=stock_id).first()
-#
-#     portfolio_rel.stocks_linked.append(stock_rel)
-#     print("stock assigned to portfolio")
-#     db.session.commit()
-#     return render_template('/template')
+# Allows a stock to be assigned to a portfolio
+@app.route('/portfolio/', methods=["POST"])
+def put_stock_in_portfolio(stock_id, portfolio_id):
+    portfolio_rel = Portfolio.query.filter_by(id=portfolio_id).first()
+    stock_rel = Stock.query.filter_by(id=stock_id).first()
+
+    portfolio_rel.stocks_linked.append(stock_rel)
+    print("stock assigned to portfolio")
+    db.session.commit()
+    return redirect('/template')
 
 
 def generate_meme(file, meme_id):

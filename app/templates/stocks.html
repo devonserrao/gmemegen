@@ -7,6 +7,7 @@
                 <tr><th>Name</th>
                 <th>Symbol</th>
                 <th>Price</th>
+                <th>Assign to Portfolio</th>
             </tr></thead>
             <tbody>
                 {% for stock in stocks %}
@@ -14,6 +15,7 @@
                 <td data-label="Name">{{ stock['name'] }}</td>
                 <td data-label="Symbol">{{ stock['symbol'] }}</td>
                 <td data-label="Price">{{ stock['price'] }}</td>
+                <td data-label="Assign"><input type="submit" class="ui fluid green button" value="Submit" onclick="{{ url_for('put_stock_in_portfolio', stock_id=stock['name'], portfolio_id=1) }}"></td>
                 </tr>
                 {% endfor %}
             </tbody>
