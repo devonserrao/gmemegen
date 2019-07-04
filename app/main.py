@@ -201,7 +201,7 @@ def create_stock():
 
 
 
-# Gets all stocks
+# Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
     stocks = Stock.query.order_by(Stock.id.desc()).all()
@@ -214,12 +214,25 @@ def view_stocks():
     return render_template('stocks.html', stocks=stocks)
 
 
-# Gets stock from api
+# Gets stock from api by stock id
 @app.route('/api/v1/stocks/<int:stock_id>', methods=["GET"])
-def api_stock(stock_id):
+def api_stock_by_id(stock_id):
     stock = Stock.query.filter_by(id=stock_id).first()
-    return jsonify(s.serialize())
+    return jsonify(stock.serialize())
 
+
+# Gets stock from api by stock name
+@app.route('/api/v1/stocks?name=<string:stock_name>', methods=["GET"])
+def api_stock_by_name(stock_name):
+    stock = Stock.query.filter_by(name=stock_name).first()
+    return jsonify(stock.serialize())
+    
+
+# Gets stock from api by stock symbol
+@app.route('/api/v1/stocks?symbol=<string:stock_symbol>', methods=["GET"])
+def api_stock_by_symbol(stock_symbol):
+    stock = Stock.query.filter_by(symbol=stock_symbol).first()
+    return jsonify(stock.serialize())
 
 # Get stock by stock id
 @app.route('/stock/<int:stock_id>', methods=["GET"])
