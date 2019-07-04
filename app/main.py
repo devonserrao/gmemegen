@@ -199,12 +199,37 @@ def create_stock():
         abort(400, "Incorrect Parameters!")
 
 
+#NOT YET COMPLETE
+# Creates a stock to api
+@app.route('/ap1/v1/stocks', methods=["POST"])
+def api_create_stock():
+    try:
+       # stock = Stock(
+       #         name=request.form['name'],
+       #         symbol=request.form['symbol'],
+       #         price=request.form['price']
+       #        )
+       # stock.serialize(
+        data=request.data
+        dataDict=json.loads(data)
+        stock = Stock(name=dataDict['name'],symbol=dataDict['symbol'],price=dataDict['price'])
+
+        db.session.add(stock)
+        db.session.commit()
+        print("stock created through API")
+    except KeyError:
+        abort(400,"Parameters Incorrect!")
+
 
 
 # Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
-    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    #args = dict(request.args)
+    filterName = request.args.get("name")
+    stocks = Stock.query.filter_by(name=filterName).all()
+    if filterName is None:
+        stocks = Stock.query.order_by(Stock.id.desc()).all()
     return jsonify([s.serialize() for s in stocks])
 
 # Gets all stocks
