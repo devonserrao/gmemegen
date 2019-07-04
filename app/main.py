@@ -198,6 +198,9 @@ def create_stock():
     except KeyError:
         abort(400, "Incorrect Parameters!")
 
+
+
+
 # Gets all stocks
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
@@ -209,6 +212,13 @@ def api_stocks():
 def view_stocks():
     stocks = Stock.query.order_by(Stock.id.desc()).all()
     return render_template('stocks.html', stocks=stocks)
+
+
+# Gets stock from api
+@app.route('/api/v1/stocks/<int:stock_id>', methods=["GET"])
+def api_stock(stock_id):
+    stock = Stock.query.filter_by(id=stock_id).first()
+    return jsonify(s.serialize())
 
 
 # Get stock by stock id
