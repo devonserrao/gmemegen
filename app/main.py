@@ -256,7 +256,8 @@ def put_stock_in_portfolio(stock_id, portfolio_id):
     portfolio_rel.stocks_linked.append(stock_rel)
     print("stock assigned to portfolio")
     db.session.commit()
-    return redirect('/template')
+    # return redirect('/template')
+    return render_template('portfolio_id.html', portfolio=portfolio_rel)
 
 
 def generate_meme(file, meme_id):
