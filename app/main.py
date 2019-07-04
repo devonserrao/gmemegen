@@ -87,10 +87,10 @@ class Stock(db.Model):
 
     def serialize(self):
         return {
-            "id" : self.id,
-            "name" : self.name,
-            "symbol" : self.symbol,
-            "price" : self.price
+            "id": self.id,
+            "name": self.name,
+            "symbol": self.symbol,
+            "price": self.price
         }
 
 
