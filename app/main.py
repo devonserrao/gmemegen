@@ -17,7 +17,7 @@ import time
 
 from flask import (
     Flask, abort, request, redirect, url_for, render_template, g,
-    send_from_directory)
+    send_from_directory, jsonify)
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 from PIL import Image, ImageDraw, ImageFont
@@ -84,6 +84,14 @@ class Stock(db.Model):
 
     def __repr__(self):
         return '<Stock %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id" : self.id,
+            "name" : self.name,
+            "symbol" : self.symbol,
+            "price" : self.price
+        }
 
 
 class Portfolio(db.Model):
@@ -190,6 +198,11 @@ def create_stock():
     except KeyError:
         abort(400, "Incorrect Parameters!")
 
+# Gets all stocks
+@app.route('/api/v1/stocks', methods=["GET"])
+def api_stocks():
+    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    return jsonify([s.serialize() for s in stocks])
 
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
