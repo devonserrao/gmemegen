@@ -236,7 +236,7 @@ def api_stocks():
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
-    json_url = urlopen(url_for(api_stocks)) ### CONTINUE FROM HERE#######################################
+    json_url = urllib.urlopen(url_for("api_stocks")) ### CONTINUE FROM HERE#######################################
     data = json.loads(json_url.read())
     print(data)
     stocks = Stock.query.order_by(Stock.id.desc()).all()
