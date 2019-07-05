@@ -236,8 +236,8 @@ def api_stocks():
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
-    json_url = urllib.request.urlopen("https://8080-dot-7759942-dot-devshell.appspot.com/api/v1/stocks")) ### CONTINUE FROM HERE#######################################
-    data = json.loads(json_url.read())
+    data = json.loads(api_stocks()) ### CONTINUE FROM HERE#######################################
+    # data = json.loads(json_url.read())
     print(data)
     stocks = Stock.query.order_by(Stock.id.desc()).all()
     return render_template('stocks.html', stocks=stocks)
