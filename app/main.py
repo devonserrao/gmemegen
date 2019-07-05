@@ -14,6 +14,7 @@
 
 import os
 import time
+import json, urllib
 
 from flask import (
     Flask, abort, request, redirect, url_for, render_template, g,
@@ -199,7 +200,7 @@ def create_stock():
         abort(400, "Incorrect Parameters!")
 
 
-#NOT YET COMPLETE
+############################################## NOT YET COMPLETE ##################################################
 # Creates a stock to api
 @app.route('/ap1/v1/stocks', methods=["POST"])
 def api_create_stock():
@@ -219,7 +220,7 @@ def api_create_stock():
         print("stock created through API")
     except KeyError:
         abort(400,"Parameters Incorrect!")
-
+#####################################################################################################################
 
 
 # Gets all stocks from api
@@ -235,6 +236,9 @@ def api_stocks():
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
+    json_url = urlopen(url_for(api_stocks)) ### CONTINUE FROM HERE#######################################
+    data = json.loads(json_url.read())
+    print(data)
     stocks = Stock.query.order_by(Stock.id.desc()).all()
     return render_template('stocks.html', stocks=stocks)
 
