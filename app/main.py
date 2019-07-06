@@ -230,7 +230,7 @@ def helper_get_stocks_from_db():
 
 
 # Helper function to get all stocks from database with a certain NAME
-def helper_get_stocks_from_db(filterName)
+def helper_get_stocks_with_name_from_db(filterName):
     stocks = Stock.query.filter_by(name=filterName).all()
     return stocks
 
@@ -247,7 +247,7 @@ def api_stocks():
     filterName = request.args.get("name")
     stocks = helper_get_stocks_from_db()
     if filterName is not None:
-        stocks = helper_get_stocks_from_db(filterName)
+        stocks = helper_get_stocks_with_name_from_db(filterName)
     return jsonify([s.serialize() for s in stocks])
 
 # Gets all stocks
