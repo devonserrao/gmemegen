@@ -223,23 +223,37 @@ def api_create_stock():
 #####################################################################################################################
 
 
+# Helper method to get stocks from database 
+def helper_get_stocks_from_db():
+    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    return stocks
+
+
 # Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
-    #args = dict(request.args)
+    ###args = dict(request.args)
+    # filterName = request.args.get("name")
+    # stocks = Stock.query.filter_by(name=filterName).all()
+    # if filterName is None:
+    #     stocks = Stock.query.order_by(Stock.id.desc()).all()
+    # return jsonify([s.serialize() for s in stocks])
     filterName = request.args.get("name")
-    stocks = Stock.query.filter_by(name=filterName).all()
-    if filterName is None:
-        stocks = Stock.query.order_by(Stock.id.desc()).all()
-    return jsonify([s.serialize() for s in stocks])
+    stocks = helper_get_stocks_from_db(filterName)
+    # elif filterName is None:
+    #     stocks = helper_get_stocks_from_db()
+    return jsonify([s.serialize] for s in stocks])
 
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
-    data = json.loads(api_stocks()) ### CONTINUE FROM HERE#######################################
-    # data = json.loads(json_url.read())
-    print(data)
-    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    # print(api_stocks().json())
+    # data = json.loads(api_stocks()) ### CONTINUE FROM HERE#######################################
+    # # data = json.loads(json_url.read())
+    # print(data)
+    # stocks = Stock.query.order_by(Stock.id.desc()).all()
+    # return render_template('stocks.html', stocks=stocks)
+    stocks = helper_get_stocks_from_db()
     return render_template('stocks.html', stocks=stocks)
 
 
