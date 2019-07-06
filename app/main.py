@@ -235,19 +235,25 @@ def helper_get_stocks_with_name_from_db(filterName):
     return stocks
 
 
+# Helper function to get all stocks from database with a certain SYMBOL
+def helper_get_stocks_with_symbol_from_db(filterSymbol):
+    stocks = Stock.query.filter_by(symbol=filterSymbol).all()
+    return stocks
+
+
 # Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
-    ###args = dict(request.args)
-    # filterName = request.args.get("name")
-    # stocks = Stock.query.filter_by(name=filterName).all()
-    # if filterName is None:
-    #     stocks = Stock.query.order_by(Stock.id.desc()).all()
-    # return jsonify([s.serialize() for s in stocks])
     filterName = request.args.get("name")
+    filterSymbol = request.args.get("symbol")
+
     stocks = helper_get_stocks_from_db()
+
     if filterName is not None:
         stocks = helper_get_stocks_with_name_from_db(filterName)
+    elif filterSymbol is not None:
+        stocks = helper_get_stocks_with_symbol_from_db(filterSymbol)
+
     return jsonify([s.serialize() for s in stocks])
 
 # Gets all stocks
