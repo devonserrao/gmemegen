@@ -223,9 +223,15 @@ def api_create_stock():
 #####################################################################################################################
 
 
-# Helper method to get stocks from database 
+# Helper method to get all stocks from database 
 def helper_get_stocks_from_db():
     stocks = Stock.query.order_by(Stock.id.desc()).all()
+    return stocks
+
+
+# Helper function to get all stocks from database with a certain NAME
+def helper_get_stocks_from_db(filterName)
+    stocks = Stock.query.filter_by(name=filterName).all()
     return stocks
 
 
@@ -239,10 +245,10 @@ def api_stocks():
     #     stocks = Stock.query.order_by(Stock.id.desc()).all()
     # return jsonify([s.serialize() for s in stocks])
     filterName = request.args.get("name")
-    stocks = helper_get_stocks_from_db(filterName)
-    # elif filterName is None:
-    #     stocks = helper_get_stocks_from_db()
-    return jsonify([s.serialize] for s in stocks])
+    stocks = helper_get_stocks_from_db()
+    if filterName is not None:
+        stocks = helper_get_stocks_from_db(filterName)
+    return jsonify([s.serialize() for s in stocks])
 
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
