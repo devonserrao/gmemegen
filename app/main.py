@@ -91,9 +91,13 @@ class Stock(db.Model):
             "id": self.id,
             "name": self.name,
             "symbol": self.symbol,
-            "price": self.price
+            "price": self.price,
+            "portfolios_linked": [return p.portfolios_linked.owner for p in self.portfolios_linked]
         }
-
+    
+    # def serialize_helper(portfolios_linked):
+    #     for p in portfolios_linked:
+            
 
 class Portfolio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -255,6 +259,7 @@ def api_stocks():
         stocks = helper_get_stocks_with_symbol_from_db(filterSymbol)
 
     return jsonify([s.serialize() for s in stocks])
+
 
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
