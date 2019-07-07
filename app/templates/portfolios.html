@@ -2,14 +2,20 @@
 <div>
     <h2>Portfolio List:</h2>
     <div class = "content">
-        {% for portfolio in portfolios %}
-            <!-- <a href="{{ url_for('view_portfolios')}}">
-            </a> -->
-            <div>
-                {{ portfolio['owner'] }}
-            </div>
-        {% endfor %}
-        <div></div>
+            <table class="ui celled table">
+                    <thead>
+                        <tr><th>Owner</th>
+                        <th>Assign to Portfolio</th>
+                    </tr></thead>
+                    <tbody>
+                        {% for portfolio in portfolios %}
+                        <tr>
+                        <td data-label="Owner">{{ portfolio['owner'] }}</td>
+                        <td data-label="Assignlink"><a href="{{ url_for('put_stock_in_portfolio', stock_id='1', portfolio_id='1') }}">Assign</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>  
     </div>
 </div>
 {% include  "footer.html" %}
