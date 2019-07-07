@@ -205,6 +205,12 @@ def api_create_stock():
 #####################################################################################################################
 
 
+# Helper function to get all the names of the stocks_linked of a portfolioOwner in a list
+def helper_get_stockslinked_of(filterOwner):
+    portfolio = Portfolio.query.filter_by(owner=filterOwner).first()
+    return [s.name for s in portfolio.stocks_linked]
+
+
 # Helper method to get all stocks from database 
 def helper_get_stocks_from_db():
     stocks = Stock.query.order_by(Stock.id.desc()).all()

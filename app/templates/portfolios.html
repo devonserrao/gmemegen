@@ -11,7 +11,7 @@
                         {% for portfolio in portfolios %}
                         <tr>
                         <td data-label="Owner">{{ portfolio['owner'] }}</td>
-                        <td data-label="Assignlink"><a href="{{ url_for('put_stock_in_portfolio', stock_id='1', portfolio_id='1') }}">Assign</a></td>
+                        <td data-label="Assignlink">{{ portfolio['stocks_linked'] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
