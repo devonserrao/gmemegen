@@ -213,13 +213,13 @@ def helper_get_stocks_from_db():
 
 # Helper function to get all stocks from database with a certain NAME
 def helper_get_stocks_with_name_from_db(filterName):
-    stocks = Stock.query.filter_by(name=filterName).first()
+    stocks = Stock.query.filter_by(name=filterName).all()
     return stocks
 
 
 # Helper function to get all stocks from database with a certain SYMBOL
 def helper_get_stocks_with_symbol_from_db(filterSymbol):
-    stocks = Stock.query.filter_by(symbol=filterSymbol).first()
+    stocks = Stock.query.filter_by(symbol=filterSymbol).all()
     return stocks
 
 
@@ -231,7 +231,7 @@ def helper_get_portfolios_from_db():
 
 # Helper function to get all portfolios from database with a certain OWNER
 def helper_get_portfolios_with_owner_from_db(filterOwner):
-    portfolios = Portfolio.query.filter_by(owner=filterOwner).first()
+    portfolios = Portfolio.query.filter_by(owner=filterOwner).all()
     return portfolios
 
 
