@@ -92,11 +92,8 @@ class Stock(db.Model):
             "name": self.name,
             "symbol": self.symbol,
             "price": self.price,
-            "portfolios_linked": [return p.portfolios_linked.owner for p in self.portfolios_linked]
+            "portfolios_linked": [p.owner for p in self.portfolios_linked]
         }
-    
-    # def serialize_helper(portfolios_linked):
-    #     for p in portfolios_linked:
             
 
 class Portfolio(db.Model):
@@ -106,15 +103,14 @@ class Portfolio(db.Model):
     def __repr__(self):
         return '<Portfolio %r>' % self.id
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "owner": self.owner,
+            "stocks_linked": [s.name for s in self.stocks_linked]
+        }
 
-# Portfolio_Stocks = db.Table(
-#     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
-#               primary_key=True),
-#     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
-#               primary_key=True)
-# )
-#
-#
+
 @app.before_first_request
 def setup_db():
     # Create folder for memes if it doesn't exist
@@ -279,20 +275,19 @@ def view_stocks():
 def api_stock_by_id(stock_id):
     stock = Stock.query.filter_by(id=stock_id).first()
     return jsonify(stock.serialize())
-
-
-# Gets stock from api by stock name
-@app.route('/api/v1/stocks?name=<string:stock_name>', methods=["GET"])
-def api_stock_by_name(stock_name):
-    stock = Stock.query.filter_by(name=stock_name).first()
-    return jsonify(stock.serialize())
+# # Gets stock from api by stock name
+# @app.route('/api/v1/stocks?name=<string:stock_name>', methods=["GET"])
+# def api_stock_by_name(stock_name):
+#     stock = Stock.query.filter_by(name=stock_name).first()
+#     return jsonify(stock.serialize())
     
 
-# Gets stock from api by stock symbol
-@app.route('/api/v1/stocks?symbol=<string:stock_symbol>', methods=["GET"])
-def api_stock_by_symbol(stock_symbol):
-    stock = Stock.query.filter_by(symbol=stock_symbol).first()
-    return jsonify(stock.serialize())
+# # Gets stock from api by stock symbol
+# @app.route('/api/v1/stocks?symbol=<string:stock_symbol>', methods=["GET"])
+# def api_stock_by_symbol(stock_symbol):
+#     stock = Stock.query.filter_by(symbol=stock_symbol).first()
+#     return jsonify(stock.serialize())
+
 
 # Get stock by stock id
 @app.route('/stock/<int:stock_id>', methods=["GET"])
@@ -329,6 +324,13 @@ def create_portfolio():
         abort(400, "Incorrect Parameters!")
 
 
+# Gets all portfolios in API
+@app.route('/api/v1/portfolios', methods=["GET"])
+def api_portfolios():
+    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    return jsonify([p.serialize() for p in portfolios])
+
+
 # Gets all portfolios
 @app.route('/portfolio', methods=["GET"])
 def view_portfolios():
@@ -354,7 +356,7 @@ def put_stock_in_portfolio(stock_id, portfolio_id):
     db.session.commit()
     # return redirect('/template')
     return render_template('portfolio_id.html', portfolio=portfolio_rel)
-
+    
 
 def generate_meme(file, meme_id):
     # Query for meme
