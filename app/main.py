@@ -241,6 +241,18 @@ def helper_get_stocks_with_symbol_from_db(filterSymbol):
     return stocks
 
 
+# Helper function to get all portfolios from database
+def helper_get_portfolios_from_db():
+    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    return portfolios
+
+
+# Helper function to get all portfolios from database with a certain OWNER
+def helper_get_portfolios_with_owner_from_db(filterOwner):
+    portfolios = Portfolio.query.filter_by(owner=filterOwner).all()
+    return portfolios
+
+
 # Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
@@ -327,15 +339,25 @@ def create_portfolio():
 # Gets all portfolios in API
 @app.route('/api/v1/portfolios', methods=["GET"])
 def api_portfolios():
-    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    filterOwner = request.args.get("owner")
+    
+    portfolios = helper_get_portfolios_from_db()
+
+    if filterOwner is not None:
+        portfolios = helper_get_portfolios_with_owner_from_db(filterOwner)
+
     return jsonify([p.serialize() for p in portfolios])
+    # portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    # return jsonify([p.serialize() for p in portfolios])
 
 
 # Gets all portfolios
 @app.route('/portfolio', methods=["GET"])
 def view_portfolios():
-    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    portfolios = helper_get_portfolios_from_db()
     return render_template('portfolios.html', portfolios=portfolios)
+    # portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    # return render_template('portfolios.html', portfolios=portfolios)
 
 
 # Gets portfolio by stock id
