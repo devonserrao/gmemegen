@@ -53,24 +53,6 @@ Portfolio_Stocks = db.Table(
 )
 
 
-# class Stock(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(80), nullable=False)
-#     symbol = db.Column(db.String(10), nullable=False)
-#     price = db.Column(db.Float, nullable=False)
-
-#     def __repr__(self):
-#         return '<Stock %r>' % self.id
-
-
-# class Portfolio(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     portfolio_owner = db.Column(db.String(80), nullable=False)
-#     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=Fals
-#     e)
-
-#     def __repr__(self):
-#         return '<Portfolio %r>' % self.id
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -231,13 +213,13 @@ def helper_get_stocks_from_db():
 
 # Helper function to get all stocks from database with a certain NAME
 def helper_get_stocks_with_name_from_db(filterName):
-    stocks = Stock.query.filter_by(name=filterName).all()
+    stocks = Stock.query.filter_by(name=filterName).first()
     return stocks
 
 
 # Helper function to get all stocks from database with a certain SYMBOL
 def helper_get_stocks_with_symbol_from_db(filterSymbol):
-    stocks = Stock.query.filter_by(symbol=filterSymbol).all()
+    stocks = Stock.query.filter_by(symbol=filterSymbol).first()
     return stocks
 
 
@@ -249,7 +231,7 @@ def helper_get_portfolios_from_db():
 
 # Helper function to get all portfolios from database with a certain OWNER
 def helper_get_portfolios_with_owner_from_db(filterOwner):
-    portfolios = Portfolio.query.filter_by(owner=filterOwner).all()
+    portfolios = Portfolio.query.filter_by(owner=filterOwner).first()
     return portfolios
 
 
@@ -272,12 +254,6 @@ def api_stocks():
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
-    # print(api_stocks().json())
-    # data = json.loads(api_stocks()) ### CONTINUE FROM HERE#######################################
-    # # data = json.loads(json_url.read())
-    # print(data)
-    # stocks = Stock.query.order_by(Stock.id.desc()).all()
-    # return render_template('stocks.html', stocks=stocks)
     stocks = helper_get_stocks_from_db()
     return render_template('stocks.html', stocks=stocks)
 
