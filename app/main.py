@@ -76,6 +76,14 @@ class Stock(db.Model):
             "price": self.price,
             "portfolios_linked": [p.owner for p in self.portfolios_linked]
         }
+    
+    def custom_serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "symbol": self.symbol,
+            "price": self.price
+        }
             
 
 class Portfolio(db.Model):
@@ -89,7 +97,7 @@ class Portfolio(db.Model):
         return {
             "id": self.id,
             "owner": self.owner,
-            "stocks_linked": [s.name for s in self.stocks_linked]
+            "stocks_linked": [s.custom_serialize() for s in self.stocks_linked]
         }
 
 
