@@ -15,7 +15,7 @@
 import os
 import time
 import json, urllib
-import Stock, Portfolio
+# import Stock, Portfolio
 
 from flask import (
     Flask, abort, request, redirect, url_for, render_template, g,
@@ -23,6 +23,9 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 from PIL import Image, ImageDraw, ImageFont
+
+from packages.Stock import Stock
+from packages.Portfolio import Portfolio
 
 from configuration import (
     get_args, get_db_uri, get_templates_list,
