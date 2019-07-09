@@ -4,6 +4,7 @@
 gMemegen is a sample application, showcasing Cloud SQL Postgres connectivity from a Kubernetes
 cluster running on Google Kubernetes Engine. 
 
+Dummy comment
 
 ## Deployment
 You can find the complete instructions (including resource setup) in the form a codelab, located 
