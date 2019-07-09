@@ -14,6 +14,7 @@
 
 import os
 import time
+import json, urllib
 
 from flask import (
     Flask, abort, request, redirect, url_for, render_template, g,
@@ -21,6 +22,10 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 from PIL import Image, ImageDraw, ImageFont
+
+# from packages.Stock import Stock
+# from packages.Portfolio import Portfolio
+from packages.Models import Stock, Portfolio, Portfolio_Stocks
 
 from configuration import (
     get_args, get_db_uri, get_templates_list,
@@ -43,13 +48,13 @@ class Meme(db.Model):
         return '<Meme %r>' % self.id
 
 
-Portfolio_Stocks = db.Table(
-    'Portfolio_Stocks',
-    db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
-              primary_key=True),
-    db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
-              primary_key=True)
-)
+# Portfolio_Stocks = db.Table(
+#     'Portfolio_Stocks',
+#     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
+#               primary_key=True),
+#     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
+#               primary_key=True)
+# )
 
 
 # class Stock(db.Model):
@@ -57,59 +62,49 @@ Portfolio_Stocks = db.Table(
 #     name = db.Column(db.String(80), nullable=False)
 #     symbol = db.Column(db.String(10), nullable=False)
 #     price = db.Column(db.Float, nullable=False)
+#     portfolios_linked = db.relationship('Portfolio',
+#                                         secondary=Portfolio_Stocks,
+#                                         lazy='subquery',
+#                                         backref=db.backref('stocks_linked',
+#                                                            lazy=True)
+#                                         )
 
 #     def __repr__(self):
 #         return '<Stock %r>' % self.id
 
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "name": self.name,
+#             "symbol": self.symbol,
+#             "price": self.price,
+#             "portfolios_linked": [p.owner for p in self.portfolios_linked]
+#         }
+    
+#     def custom_serialize(self):
+#         return {
+#             "id": self.id,
+#             "name": self.name,
+#             "symbol": self.symbol,
+#             "price": self.price
+#         }
+            
 
 # class Portfolio(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
-#     portfolio_owner = db.Column(db.String(80), nullable=False)
-#     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'), nullable=Fals
-#     e)
+#     owner = db.Column(db.String(80), nullable=False)
 
 #     def __repr__(self):
 #         return '<Portfolio %r>' % self.id
-class Stock(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    symbol = db.Column(db.String(10), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    portfolios_linked = db.relationship('Portfolio',
-                                        secondary=Portfolio_Stocks,
-                                        lazy='subquery',
-                                        backref=db.backref('stocks_linked',
-                                                           lazy=True)
-                                        )
 
-    def __repr__(self):
-        return '<Stock %r>' % self.id
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "symbol": self.symbol,
-            "price": self.price
-        }
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "owner": self.owner,
+#             "stocks_linked": [s.custom_serialize() for s in self.stocks_linked]
+#         }
 
 
-class Portfolio(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    owner = db.Column(db.String(80), nullable=False)
-
-    def __repr__(self):
-        return '<Portfolio %r>' % self.id
-
-
-# Portfolio_Stocks = db.Table(
-#     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'),
-#               primary_key=True),
-#     db.Column('portfolio_id', db.Integer, db.ForeignKey('portfolio.id'),
-#               primary_key=True)
-# )
-#
-#
 @app.before_first_request
 def setup_db():
     # Create folder for memes if it doesn't exist
@@ -198,17 +193,106 @@ def create_stock():
     except KeyError:
         abort(400, "Incorrect Parameters!")
 
-# Gets all stocks
+
+############################################## NOT YET COMPLETE ##################################################
+# Creates a stock to api
+@app.route('/ap1/v1/stocks', methods=["POST"])
+def api_create_stock():
+    try:
+       # stock = Stock(
+       #         name=request.form['name'],
+       #         symbol=request.form['symbol'],
+       #         price=request.form['price']
+       #        )
+       # stock.serialize(
+        data=request.data
+        dataDict=json.loads(data)
+        stock = Stock(name=dataDict['name'],symbol=dataDict['symbol'],price=dataDict['price'])
+
+        db.session.add(stock)
+        db.session.commit()
+        print("stock created through API")
+    except KeyError:
+        abort(400,"Parameters Incorrect!")
+#####################################################################################################################
+
+
+# Helper function to get all the names of the stocks_linked of a portfolioOwner in a list
+def helper_get_stockslinked_of(filterOwner):
+    portfolio = Portfolio.query.filter_by(owner=filterOwner).first()
+    return [s.name for s in portfolio.stocks_linked]
+
+
+# Helper method to get all stocks from database 
+def helper_get_stocks_from_db():
+    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    return stocks
+
+
+# Helper function to get all stocks from database with a certain NAME
+def helper_get_stocks_with_name_from_db(filterName):
+    stocks = Stock.query.filter_by(name=filterName).all()
+    return stocks
+
+
+# Helper function to get all stocks from database with a certain SYMBOL
+def helper_get_stocks_with_symbol_from_db(filterSymbol):
+    stocks = Stock.query.filter_by(symbol=filterSymbol).all()
+    return stocks
+
+
+# Helper function to get all portfolios from database
+def helper_get_portfolios_from_db():
+    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    return portfolios
+
+
+# Helper function to get all portfolios from database with a certain OWNER
+def helper_get_portfolios_with_owner_from_db(filterOwner):
+    portfolios = Portfolio.query.filter_by(owner=filterOwner).all()
+    return portfolios
+
+
+# Gets all stocks from api
 @app.route('/api/v1/stocks', methods=["GET"])
 def api_stocks():
-    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    filterName = request.args.get("name")
+    filterSymbol = request.args.get("symbol")
+
+    stocks = helper_get_stocks_from_db()
+
+    if filterName is not None:
+        stocks = helper_get_stocks_with_name_from_db(filterName)
+    elif filterSymbol is not None:
+        stocks = helper_get_stocks_with_symbol_from_db(filterSymbol)
+
     return jsonify([s.serialize() for s in stocks])
+
 
 # Gets all stocks
 @app.route('/stock', methods=["GET"])
 def view_stocks():
-    stocks = Stock.query.order_by(Stock.id.desc()).all()
+    stocks = helper_get_stocks_from_db()
     return render_template('stocks.html', stocks=stocks)
+
+
+# Gets stock from api by stock id
+@app.route('/api/v1/stocks/<int:stock_id>', methods=["GET"])
+def api_stock_by_id(stock_id):
+    stock = Stock.query.filter_by(id=stock_id).first()
+    return jsonify(stock.serialize())
+# # Gets stock from api by stock name
+# @app.route('/api/v1/stocks?name=<string:stock_name>', methods=["GET"])
+# def api_stock_by_name(stock_name):
+#     stock = Stock.query.filter_by(name=stock_name).first()
+#     return jsonify(stock.serialize())
+    
+
+# # Gets stock from api by stock symbol
+# @app.route('/api/v1/stocks?symbol=<string:stock_symbol>', methods=["GET"])
+# def api_stock_by_symbol(stock_symbol):
+#     stock = Stock.query.filter_by(symbol=stock_symbol).first()
+#     return jsonify(stock.serialize())
 
 
 # Get stock by stock id
@@ -246,11 +330,28 @@ def create_portfolio():
         abort(400, "Incorrect Parameters!")
 
 
+# Gets all portfolios in API
+@app.route('/api/v1/portfolios', methods=["GET"])
+def api_portfolios():
+    filterOwner = request.args.get("owner")
+    
+    portfolios = helper_get_portfolios_from_db()
+
+    if filterOwner is not None:
+        portfolios = helper_get_portfolios_with_owner_from_db(filterOwner)
+
+    return jsonify([p.serialize() for p in portfolios])
+    # portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    # return jsonify([p.serialize() for p in portfolios])
+
+
 # Gets all portfolios
 @app.route('/portfolio', methods=["GET"])
 def view_portfolios():
-    portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    portfolios = helper_get_portfolios_from_db()
     return render_template('portfolios.html', portfolios=portfolios)
+    # portfolios = Portfolio.query.order_by(Portfolio.id.desc()).all()
+    # return render_template('portfolios.html', portfolios=portfolios)
 
 
 # Gets portfolio by stock id
@@ -272,7 +373,7 @@ def put_stock_in_portfolio(stock_id, portfolio_id):
     db.session.commit()
     # return redirect('/template')
     return render_template('portfolio_id.html', portfolio=portfolio_rel)
-
+    
 
 def generate_meme(file, meme_id):
     # Query for meme
