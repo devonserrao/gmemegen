@@ -11,7 +11,11 @@
                         {% for portfolio in portfolios %}
                         <tr>
                         <td data-label="Owner">{{ portfolio['owner'] }}</td>
-                        <td data-label="Assignlink">{{ portfolio['stocks_linked'] }}</td>
+                        <td data-label="Assignlink">
+                            {% for stock in {{ portfolio['stocks_linked'] }} %}
+                            <a>{{ stock['name'] }}</a>
+                            {% endfor %}
+                        </td>
                         </tr>
                         {% endfor %}
                     </tbody>
