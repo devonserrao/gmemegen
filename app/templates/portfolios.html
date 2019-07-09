@@ -13,7 +13,11 @@
                         <td data-label="Owner">{{ portfolio['owner'] }}</td>
                         <td data-label="Assignlink">
                             {% for stock in {{ portfolio['stocks_linked'] }} %}
-                            <a>{{ stock['name'] }}</a>
+                                {% if stock is not none %}
+                                    <a>{{ stock['name'] }}</a>
+                                {% else %}
+                                    NONE!
+                                {% endif %}
                             {% endfor %}
                         </td>
                         </tr>
